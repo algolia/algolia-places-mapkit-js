@@ -50,13 +50,20 @@ body {
   });
 
   function display(suggestion) {
-    var point = new mapkit.MarkerAnnotation(new mapkit.Coordinate(suggestion.latlng.lat, suggestion.latlng.lng), {
+    var coords = new mapkit.Coordinate(suggestion.latlng.lat, suggestion.latlng.lng)
+    var point = new mapkit.MarkerAnnotation(coords, {
         // draggable: true,
         selected: true,
         title: suggestion.name,
         color: '#434BFE'
     });
     map.addAnnotations([point]);
+
+    var region = new mapkit.CoordinateRegion(
+        coords,
+        new mapkit.CoordinateSpan(0.02, 0.02)
+    );
+    map.setRegionAnimated(region);
   }
 
   placesAutocomplete.on('change', e => display(e.suggestion));
@@ -74,7 +81,7 @@ body {
 
     var region = new mapkit.CoordinateRegion(
         new mapkit.Coordinate(48.8797, 2.327),
-        new mapkit.CoordinateSpan(0.02, 0.02)
+        new mapkit.CoordinateSpan(1, 1)
     );
     
     var map = new mapkit.Map("map", {
