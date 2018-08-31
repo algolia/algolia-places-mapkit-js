@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.9.1"></script>
+
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, Roboto, "Helvetica Neue", sans-serif;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+#attribution {
+  position: absolute;
+  background-color: white;
+  top: 2.5em;
+  left: 1.5em;
+  right: 1.5em;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  line-height: 1.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+
+<div id="attribution">
+<input type="search" id="address-input" placeholder="Where are we going?" />
+
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.9.1"></script>
+<script>
+  var placesAutocomplete = places({
+    container: document.querySelector('#address-input')
+  });
+
+  function display(suggestion) {
+    var point = new mapkit.MarkerAnnotation(new mapkit.Coordinate(suggestion.latlng.lat, suggestion.latlng.lng), {
+        // draggable: true,
+        selected: true,
+        title: suggestion.name,
+        color: '#434BFE'
+    });
+    map.addAnnotations([point]);
+  }
+
+  placesAutocomplete.on('change', e => display(e.suggestion));
+</script>
+</div>
+        
+<script>
+    mapkit.init({
+        // If you plan to use this code please use your own JWT key
+        authorizationCallback: function(done) {
+            done("eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlpZMkFBTlpKSkgifQ.eyJpc3MiOiI1UkRGSllVVjIzIiwiaWF0IjoxNTM1NzE5MTA4LjM4MiwiZXhwIjoxNTUxNDk3OTA4LjM4Mn0.MmTcDdoQ3oNihxz-SDrz33xMJ9IeamaVLqWHbe-DxCdzQoZphTjU1dfZCO5MWnRjSr0mlc1mVpVOcHyfOV52iw");
+        },
+        language: "en"
+    });
+
+    var region = new mapkit.CoordinateRegion(
+        new mapkit.Coordinate(48.8797, 2.327),
+        new mapkit.CoordinateSpan(0.02, 0.02)
+    );
+    
+    var map = new mapkit.Map("map", {
+        center: new mapkit.Coordinate(47.3769, 8.5417),
+        region: region,
+        showsUserLocation: true,
+        showsUserLocationControl: true
+    });
+</script>
+</body>
+</html>
